@@ -1,26 +1,13 @@
-import 'package:shared_preferences/shared_preferences.dart';
-
-class UserModel {
-  String username;
-  String password;
-  UserModel({this.username, this.password});
-}
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService {
   static AuthService instance = AuthService();
-  UserModel user = UserModel(username: "test");
   bool _isAuthenticated = true;
+  final storage = new FlutterSecureStorage();
 
-  AuthService() {
-    SharedPreferences.getInstance().then((instance) {
-      print('happend');
-      var password = instance.getString('password');
-      user.password = password ?? 'test';
-    });
-  }
-
-  bool login(String username, String password) {
-    return username == user.username && password == user.password;
+  Future<bool> login(String password) async {
+    var storedPassword = await storage.read(key: 'password');
+    return password == storedPassword;
   }
 
   bool get isAuthenticated {
@@ -28,9 +15,7 @@ class AuthService {
   }
 
   Future<void> savePassword(String password) async {
-    SharedPreferences instance = await SharedPreferences.getInstance();
-    // don't try this at home kids
-    await instance.setString('password', password);
-    user.password = password;
+    await storage.write(key: 'password', value: password);
+    password = password;
   }
 }

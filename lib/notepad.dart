@@ -25,12 +25,12 @@ class _NotepadScreenState extends State<NotepadScreen> {
   }
 
   Future<String> load() {
-    return FileService.instance.readData('notepad.txt');
+    return FileService.instance.readData();
   }
 
   void save() {
     setState(() {
-      FileService.instance.writeData(notepadController.text, 'notepad.txt').then((file) {
+      FileService.instance.writeData(notepadController.text).then((_) {
         Toast.show('Note saved', context);
       });
     });

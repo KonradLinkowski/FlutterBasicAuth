@@ -10,21 +10,22 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  UserModel _data = UserModel();
+  String password;
 
   void login() {
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
-    bool success = AuthService.instance.login(this._data.username, this._data.password);
-    if (success) {
-      _formKey.currentState.reset();
-      Navigator.pushNamed(context, '/notepad');
-      Toast.show('Successful login', context);
-    } else {
-      Toast.show('Wrong credentials', context);
-    }
+    AuthService.instance.login(this.password).then((success) {
+      if (success) {
+        _formKey.currentState.reset();
+        Navigator.pushNamed(context, '/notepad');
+        Toast.show('Successful login', context);
+      } else {
+        Toast.show('Wrong credentials', context);
+      }
+    });
   }
 
   @override
@@ -40,14 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                onSaved: (value) => this._data.username = value,
-                decoration: InputDecoration(
-                  labelText: 'Enter your username'
-                ),
-              ),
-              TextFormField(
                 obscureText: true,
-                onSaved: (value) => this._data.password = value,
+                onSaved: (value) => this.password = value,
                 decoration: InputDecoration(
                     labelText: 'Enter your password'
                 ),
