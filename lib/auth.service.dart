@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:password/password.dart';
 
 class AuthService {
   static AuthService instance = AuthService();
@@ -7,7 +8,13 @@ class AuthService {
 
   Future<bool> login(String password) async {
     var storedPassword = await storage.read(key: 'password');
-    return password == storedPassword;
+    if (password.length == 0 && storedPassword == null) {
+      return _isAuthenticated = true;
+    } else if (password.length == 0 || storedPassword == null) {
+      return _isAuthenticated = false;
+    } else {
+      return _isAuthenticated = Password.verify(password, storedPassword);
+    }
   }
 
   bool get isAuthenticated {
@@ -15,7 +22,7 @@ class AuthService {
   }
 
   Future<void> savePassword(String password) async {
-    await storage.write(key: 'password', value: password);
-    password = password;
+    var pass = Password.hash(password, new PBKDF2());
+    await storage.write(key: 'password', value: pass);
   }
 }

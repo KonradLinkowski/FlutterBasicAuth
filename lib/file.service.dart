@@ -1,6 +1,5 @@
 import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'dart:io';
-import 'package:encrypt/encrypt.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class FileService {
