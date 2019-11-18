@@ -1,4 +1,5 @@
 import 'package:basic_auth/auth.service.dart';
+import 'package:basic_auth/password.dart';
 import 'package:flutter/material.dart';
 import 'file.service.dart';
 import 'package:toast/toast.dart';
@@ -36,17 +37,18 @@ class _NotepadScreenState extends State<NotepadScreen> {
     });
   }
 
-  void savePassword() {
-    AuthService.instance.savePassword(passwordController.text).then((_) {
-      Toast.show('Password changed', context);
-    });
+  void changePassword() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PasswordScreen()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Test notepad'),
+        title: Text('Save your notes'),
       ),
       body: Center(
         child: Column(
@@ -65,18 +67,11 @@ class _NotepadScreenState extends State<NotepadScreen> {
                 ),
               )
             ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Enter your new password'
-              ),
-              controller: passwordController,
-              obscureText: true,
-            ),
             MaterialButton(
-              child: Text('Save password'),
+              child: Text('Change password'),
               color: Colors.blue,
               textColor: Colors.white,
-              onPressed: savePassword,
+              onPressed: changePassword,
             )
           ],
         ),

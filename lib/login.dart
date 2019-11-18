@@ -1,3 +1,4 @@
+import 'package:basic_auth/file.service.dart';
 import 'package:flutter/material.dart';
 import 'auth.service.dart';
 import 'package:toast/toast.dart';
@@ -12,27 +13,27 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String password;
 
-  void login() {
+  Future<void> login() async {
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
-    AuthService.instance.login(this.password).then((success) {
-      if (success) {
-        _formKey.currentState.reset();
-        Navigator.pushNamed(context, '/notepad');
-        Toast.show('Successful login', context);
-      } else {
-        Toast.show('Wrong credentials', context);
-      }
-    });
+    final bool success = await AuthService.instance.login(this.password);
+    final bool hasPassword = (await AuthService.instance.storage.read(key: 'password')) != null ? true : false;
+    if (success) {
+      _formKey.currentState.reset();
+      Navigator.pushNamed(context, hasPassword ? '/notepad' : '/password');
+      Toast.show('Successful login', context);
+    } else {
+      Toast.show('Wrong credentials', context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Test login'),
+        title: Text('Login'),
       ),
       body: Container(
         margin: EdgeInsets.all(50.0),
@@ -51,7 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text("Login"),
                 textColor: Colors.white,
                 color: Colors.blue,
-                onPressed: this.login,
+                onPressed: () async {
+                  await this.login();
+                },
               ),
             ],
           ),

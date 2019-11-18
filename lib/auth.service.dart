@@ -1,5 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:password/password.dart';
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
+import 'file.service.dart';
 
 class AuthService {
   static AuthService instance = AuthService();
@@ -24,5 +26,6 @@ class AuthService {
   Future<void> savePassword(String password) async {
     var pass = Password.hash(password, new PBKDF2());
     await storage.write(key: 'password', value: pass);
+    await FileService.instance.createFileKey(password);
   }
 }

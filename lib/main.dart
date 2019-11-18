@@ -1,15 +1,17 @@
+import 'package:basic_auth/file.service.dart';
+import 'package:basic_auth/password.dart';
 import 'package:flutter/material.dart';
 
 import 'login.dart';
 import 'notepad.dart';
-import 'auth.service.dart';
 
 void main() {
   runApp(MaterialApp(
-    title: 'Named Routes Demo',
+    title: 'My notepad',
     initialRoute: '/',
     routes: {
-      '/notepad': AuthService.instance.isAuthenticated ? (context) => NotepadScreen() : LoginScreen(),
+      '/password': (context) => PasswordScreen(),
+      '/notepad': (context) => NotepadScreen(),
       '/': (context) => LoginScreen(),
     },
   ));
