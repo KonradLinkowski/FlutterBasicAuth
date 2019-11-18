@@ -32,7 +32,7 @@ class _NotepadScreenState extends State<NotepadScreen> {
   void save() {
     setState(() {
       FileService.instance.writeData(notepadController.text).then((_) {
-        Toast.show('Note saved', context);
+        Toast.show('Note saved', context, gravity: Toast.CENTER);
       });
     });
   }

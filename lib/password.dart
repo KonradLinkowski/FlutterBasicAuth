@@ -13,6 +13,7 @@ class PasswordScreen extends StatefulWidget {
 class _PasswordScreenState extends State<PasswordScreen> {
   final notepadController = TextEditingController();
   final passwordController = TextEditingController();
+  bool loading = false;
 
   @override
   void initState() {
@@ -21,7 +22,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   void savePassword() {
     AuthService.instance.savePassword(passwordController.text).then((_) {
-      Toast.show('Password changed', context);
+      Toast.show('Password changed', context, gravity: Toast.CENTER);
     });
   }
 

@@ -23,9 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (success) {
       _formKey.currentState.reset();
       Navigator.pushNamed(context, hasPassword ? '/notepad' : '/password');
-      Toast.show('Successful login', context);
+      Toast.show('Successful login', context, gravity: Toast.CENTER);
     } else {
-      Toast.show('Wrong credentials', context);
+      Toast.show('Wrong credentials', context, gravity: Toast.CENTER);
     }
   }
 
