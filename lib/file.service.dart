@@ -1,5 +1,3 @@
-import 'package:path_provider/path_provider.dart' as pathProvider;
-import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 
@@ -11,16 +9,6 @@ class FileService {
 
   bool get hasFileKey {
     return _hasFileKey;
-  }
-
-  Future<String> get _localPath async {
-    final directory = await pathProvider.getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<File> _openFile(String fileName) async {
-    final path = await _localPath;
-    return File('$path/$fileName');
   }
 
   Future<void> writeData(String data) async {
@@ -40,13 +28,15 @@ class FileService {
     } on MacMismatchException {
       print('error');
     }
+    return null;
   }
 
   Future<void> createFileKey(String password) async {
     final String encrypted = await storage.read(key: 'note');
     final String key = await storage.read(key: 'file_key');
     final String salt = await FileService.instance.cryptor.generateSalt();
-    final String newKey = await FileService.instance.cryptor.generateKeyFromPassword(password, salt);
+    final String newKey = await FileService.instance.cryptor
+        .generateKeyFromPassword(password, salt);
     await storage.write(key: 'file_key', value: newKey);
     _hasFileKey = true;
     if (encrypted != null) {

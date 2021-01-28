@@ -1,4 +1,3 @@
-import 'package:basic_auth/auth.service.dart';
 import 'package:basic_auth/password.dart';
 import 'package:flutter/material.dart';
 import 'file.service.dart';
@@ -54,19 +53,17 @@ class _NotepadScreenState extends State<NotepadScreen> {
         child: Column(
           children: <Widget>[
             SingleChildScrollView(
-              padding: EdgeInsets.all(0.0),
-              child: SizedBox(
-                height: 100,
-                child: TextField(
-                  decoration: InputDecoration(
-                      labelText: 'Write your notes here'
+                padding: EdgeInsets.all(0.0),
+                child: SizedBox(
+                  height: 100,
+                  child: TextField(
+                    decoration:
+                        InputDecoration(labelText: 'Write your notes here'),
+                    controller: notepadController,
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
                   ),
-                  controller: notepadController,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                ),
-              )
-            ),
+                )),
             MaterialButton(
               child: Text('Change password'),
               color: Colors.blue,

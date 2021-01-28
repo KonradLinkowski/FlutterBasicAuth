@@ -1,4 +1,3 @@
-import 'package:basic_auth/file.service.dart';
 import 'package:basic_auth/password.dart';
 import 'package:flutter/material.dart';
 
@@ -16,4 +15,3 @@ void main() {
     },
   ));
 }
-

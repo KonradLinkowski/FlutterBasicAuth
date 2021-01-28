@@ -1,4 +1,4 @@
-import 'package:basic_auth/file.service.dart';
+import 'package:basic_auth/finger.service.dart';
 import 'package:flutter/material.dart';
 import 'auth.service.dart';
 import 'package:toast/toast.dart';
@@ -19,7 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     _formKey.currentState.save();
     final bool success = await AuthService.instance.login(this.password);
-    final bool hasPassword = (await AuthService.instance.storage.read(key: 'password')) != null ? true : false;
+    final bool hasPassword =
+        (await AuthService.instance.storage.read(key: 'password')) != null
+            ? true
+            : false;
     if (success) {
       _formKey.currentState.reset();
       Navigator.pushNamed(context, hasPassword ? '/notepad' : '/password');
@@ -29,37 +32,54 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> loginWithFinger() async {
+    _formKey.currentState.save();
+    final bool success = await FingerService.instance.authenticate();
+//    final bool hasPassword = (await AuthService.instance.storage.read(key: 'password')) != null ? true : false;
+    if (success) {
+      _formKey.currentState.reset();
+      Navigator.pushNamed(context, '/notepad');
+      Toast.show('Successful login', context, gravity: Toast.CENTER);
+    } else {
+      Toast.show('Wrong credentials', context, gravity: Toast.CENTER);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Container(
-        margin: EdgeInsets.all(50.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                obscureText: true,
-                onSaved: (value) => this.password = value,
-                decoration: InputDecoration(
-                    labelText: 'Enter your password'
+        appBar: AppBar(
+          title: Text('Login'),
+        ),
+        body: Container(
+          margin: EdgeInsets.all(50.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  obscureText: true,
+                  onSaved: (value) => this.password = value,
+                  decoration: InputDecoration(labelText: 'Enter your password'),
                 ),
-              ),
-              MaterialButton(
-                child: Text("Login"),
-                textColor: Colors.white,
-                color: Colors.blue,
-                onPressed: () async {
-                  await this.login();
-                },
-              ),
-            ],
+                MaterialButton(
+                  child: Text("Login"),
+                  textColor: Colors.white,
+                  color: Colors.blue,
+                  onPressed: () async {
+                    await this.login();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            await this.loginWithFinger();
+          },
+          tooltip: 'Authenticate',
+          child: Icon(Icons.fingerprint),
+        ));
   }
 }

@@ -1,6 +1,5 @@
 import 'package:basic_auth/auth.service.dart';
 import 'package:flutter/material.dart';
-import 'file.service.dart';
 import 'package:toast/toast.dart';
 
 class PasswordScreen extends StatefulWidget {
@@ -36,9 +35,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
         child: Column(
           children: <Widget>[
             TextField(
-              decoration: InputDecoration(
-                labelText: 'Enter your new password'
-              ),
+              decoration: InputDecoration(labelText: 'Enter your new password'),
               controller: passwordController,
               obscureText: true,
             ),
